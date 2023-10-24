@@ -84,13 +84,6 @@ create table orders
     status      enum ('APPROVED','CANCELED','CLOSED','NEW','PAID'),
     primary key (id)
 );
-create table product_image
-(
-    id        bigint not null auto_increment,
-    file_path varchar(255),
-    name      varchar(255),
-    primary key (id)
-);
 create table product_info_seq
 (
     next_val bigint
