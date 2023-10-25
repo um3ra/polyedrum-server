@@ -162,6 +162,6 @@ alter table products
 alter table products
     add constraint products_fk_products_info foreign key (product_info_id) references products_info (id);
 alter table products_genres
-    add constraint products_genres_fk_genre foreign key (genre_id) references genres (id);
+    add constraint products_genres_fk_genre foreign key (genre_id) references genres (id) on delete cascade on update cascade;
 alter table products_genres
-    add constraint products_genres_fk_products foreign key (product_id) references products (id);
+    add constraint products_genres_fk_products foreign key (product_id) references products (id) on delete cascade on update cascade;
