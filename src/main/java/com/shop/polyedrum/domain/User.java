@@ -1,5 +1,6 @@
 package com.shop.polyedrum.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,14 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name="users")
+@JsonIgnoreProperties({
+        "accountNonExpired",
+        "accountNonLocked",
+        "credentialsNonExpired",
+        "authorities",
+        "enabled",
+        "username"
+})
 public class User implements UserDetails {
 
     private static final String SEQ_NAME = "user_seq";
