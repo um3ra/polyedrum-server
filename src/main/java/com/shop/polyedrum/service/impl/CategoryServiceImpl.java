@@ -26,7 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "name", categoryName));
     }
 
-    @Transactional
     @Override
     public String createCategory(Category category) {
         validateCategory(category);
@@ -38,13 +37,14 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
+
     private void validateCategory(Category category){
         if (categoryRepository.findByName(category.getName()).isPresent()){
             throw new ApiException("Category with name " + category.getName() + " is already exists!", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @Transactional
     @Override
     public String updateCategory(Category category, String categoryName) {
         validateCategory(category);
@@ -55,7 +55,6 @@ public class CategoryServiceImpl implements CategoryService {
         return "category updated";
     }
 
-    @Transactional
     @Override
     public String deleteCategoryByName(String categoryName) {
         Category category = categoryRepository.findByName(categoryName)
@@ -64,7 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
         return "category deleted successfully";
     }
 
-    @Transactional
     @Override
     public String addGenreToCategory(String categoryName, String genreName) {
         Category category = categoryRepository.findByName(categoryName)
@@ -80,7 +78,6 @@ public class CategoryServiceImpl implements CategoryService {
         return "genre " + genreName + " added to " + categoryName;
     }
 
-    @Transactional
     @Override
     public String deleteGenreFromCategory(String categoryName, String genreName){
         Category category = categoryRepository.findByName(categoryName)

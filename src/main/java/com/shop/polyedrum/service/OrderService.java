@@ -10,6 +10,5 @@ import java.util.List;
 public interface OrderService {
     String createOrder(BucketDTO bucketDTO, User user);
     List<Order> getAllByUser(User user);
-    Order getOrderById(Long id);
     List<OrderDTO> getOrders();
 }

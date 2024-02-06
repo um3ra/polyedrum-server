@@ -49,7 +49,6 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    @Transactional
     public Bucket createBucket(List<Long> productsIDs, User user) {
         Bucket bucket = new Bucket();
         bucket.setUser(user);
@@ -59,7 +58,6 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    @Transactional
     public void addProducts(List<Long> productIDs, Bucket bucket) {
         List<Product> products = bucket.getProducts();
         List<Product> newProducts = products == null ?
@@ -71,7 +69,6 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    @Transactional
     public String addProductToUserBucket(Long productID, User user) {
 
         if (user == null){
@@ -87,7 +84,6 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    @Transactional
     public String deleteProductFromBucket(Long productId, User user) {
         Bucket bucket = user.getBucket();
 
@@ -104,12 +100,5 @@ public class BucketServiceImpl implements BucketService {
 
     private List<Product> getCollectRefProductsByIds(List<Long> productIDs){
         return productIDs.stream().map(productRepository::getOne).collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public String deleteBucketById(Long id){
-        bucketRepository.deleteById(id);
-        return "bucket deleted successfully";
     }
 }

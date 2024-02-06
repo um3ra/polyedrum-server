@@ -60,13 +60,6 @@ public class OrderServiceImpl implements OrderService {
         return "order created successfully";
     }
 
-
-    @Override
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
-    }
-
     private OrderDTO mapOrderToDTO(Order order){
         return OrderDTO
                 .builder()

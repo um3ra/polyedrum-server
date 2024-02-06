@@ -60,7 +60,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    @Transactional
     @Override
     public String updateProduct(Product product, Long id) {
         Product exsProduct = getProductById(id);
@@ -140,7 +139,6 @@ public class ProductServiceImpl implements ProductService {
         return response;
     }
 
-    @Transactional
     @Override
     public String deleteProduct(Long id) {
         getProductById(id);
@@ -231,7 +229,6 @@ public class ProductServiceImpl implements ProductService {
                 sortedProducts);
     }
 
-    @Transactional
     @Override
     public String deleteGenreFromProduct(String productName, String genreName) {
         Product product = productRepository.findByTitle(productName)

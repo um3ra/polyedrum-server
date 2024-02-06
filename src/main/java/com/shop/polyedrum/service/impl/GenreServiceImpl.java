@@ -25,7 +25,6 @@ public class GenreServiceImpl implements GenreService{
     }
 
 
-    @Transactional
     @Override
     public String updateGenre(Genre genre, String name) {
         Genre exsGenre = genreRepository.findByName(name)
@@ -39,7 +38,6 @@ public class GenreServiceImpl implements GenreService{
         return "genre updated successfully";
     }
 
-    @Transactional
     @Override
     public String createGenre(Genre genre) {
         if (genreRepository.findByName(genre.getName()).isPresent()){
@@ -50,7 +48,6 @@ public class GenreServiceImpl implements GenreService{
         return "genre with name " + genre.getName() + " created successfully";
     }
 
-    @Transactional
     @Override
     public String deleteGenreByName(String name) {
         Genre genre = genreRepository.findByName(name)

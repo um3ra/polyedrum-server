@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     @Override
     public User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(()->
@@ -37,7 +36,6 @@ public class UserServiceImpl implements UserService {
         return toDto(getUserById(id));
     }
 
-    @Transactional
     @Override
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream().map(this :: toDto).collect(Collectors.toList());
@@ -52,7 +50,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    @Transactional
     @Override
     public String deleteUser(Long id) {
         getUserById(id);
@@ -60,7 +57,6 @@ public class UserServiceImpl implements UserService {
         return "user deleted successfully";
     }
 
-    @Transactional
     @Override
     public String updateUser(UserDTO userDTO, Long id) {
         User user = getUserById(id);
