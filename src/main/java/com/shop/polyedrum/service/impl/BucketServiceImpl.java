@@ -83,6 +83,7 @@ public class BucketServiceImpl implements BucketService {
         return "product added to bucket";
     }
 
+    @Transactional
     @Override
     public String deleteProductFromBucket(Long productId, User user) {
         Bucket bucket = user.getBucket();

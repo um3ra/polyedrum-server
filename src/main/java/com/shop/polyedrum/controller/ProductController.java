@@ -106,6 +106,13 @@ public class ProductController {
         return ResponseHandler.responseBuilder(productService.createProduct(product), HttpStatus.CREATED, "");
     }
 
+
+    @PutMapping("{id}/genres")
+    public ResponseEntity<Object> updateGenres(@PathVariable Long id, @RequestBody List<String> genres){
+        return ResponseHandler.responseBuilder(productService.updateGenresToProduct(id, genres), HttpStatus.OK, "");
+    }
+
+
     @PostMapping
     public ResponseEntity<Object> uploadImageToProduct(@RequestParam MultipartFile image, @RequestParam String product) throws IOException {
         Product pr = productService.getProductByName(product);

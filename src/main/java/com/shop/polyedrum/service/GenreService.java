@@ -9,5 +9,5 @@ public interface GenreService {
     Genre getGenreByName(String name);
     String updateGenre(Genre genre, String name);
     String createGenre(Genre genre);
-    String deleteGenreByName(String name);
+    String deleteGenreById(Long id);
 }

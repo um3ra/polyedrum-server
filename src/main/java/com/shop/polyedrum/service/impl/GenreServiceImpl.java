@@ -25,6 +25,7 @@ public class GenreServiceImpl implements GenreService{
     }
 
 
+    @Transactional
     @Override
     public String updateGenre(Genre genre, String name) {
         Genre exsGenre = genreRepository.findByName(name)
@@ -49,9 +50,9 @@ public class GenreServiceImpl implements GenreService{
     }
 
     @Override
-    public String deleteGenreByName(String name) {
-        Genre genre = genreRepository.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Genre", "name", name));
+    public String deleteGenreById(Long id) {
+        Genre genre = genreRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Genre", "id", id));
         genreRepository.deleteById(genre.getId());
         return "genre deleted successfully";
     }

@@ -152,9 +152,9 @@ alter table buckets_products
 alter table genres
     add constraint genres_fk_category foreign key (category_id) references categories (id);
 alter table order_details
-    add constraint order_details_fk_order foreign key (order_id) references orders (id);
+    add constraint order_details_fk_order foreign key (order_id) references orders (id) on delete cascade on update cascade;
 alter table order_details
-    add constraint order_details_fk_product foreign key (product_id) references products (id);
+    add constraint order_details_fk_product foreign key (product_id) references products (id) on delete cascade on update cascade;
 alter table orders
     add constraint orders_fk_user foreign key (user_id) references users (id);
 alter table products

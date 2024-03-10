@@ -20,4 +20,5 @@ public interface ProductService {
     String deleteProduct(Long id);
     String deleteGenreFromProduct(String productName, String genreName);
     String addProductToGenre(String productName, String genreName);
+    String updateGenresToProduct(Long id, List<String> genres);
 }

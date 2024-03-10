@@ -18,8 +18,11 @@ public class BucketDTO {
     private BigDecimal sum;
     private List<BucketDetails> bucketDetails = new ArrayList<>();
 
-    public void aggregate(){
-        this.amountProducts = bucketDetails.size();
+    public void aggregate() {
+        this.amountProducts = (long) bucketDetails
+                .stream()
+                .mapToDouble(BucketDetails::getAmount)
+                .sum();
         this.sum = bucketDetails.stream()
                 .map(BucketDetails::getSum)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

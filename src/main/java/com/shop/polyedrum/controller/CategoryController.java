@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/categories")
@@ -15,41 +16,41 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("{name}")
-    public ResponseEntity<Object> getCategoryByName(@PathVariable String name){
+    public ResponseEntity<Object> getCategoryByName(@PathVariable String name) {
         return ResponseHandler.responseBuilder("",
                 HttpStatus.OK,
                 categoryService.getCategoryByName(name));
     }
 
     @GetMapping
-    public ResponseEntity<Object> getCategories(){
+    public ResponseEntity<Object> getCategories() {
         return ResponseHandler.responseBuilder("",
                 HttpStatus.OK,
                 categoryService.getAllCategories());
     }
 
     @PostMapping
-    public ResponseEntity<Object> createCategory(@RequestBody Category category){
+    public ResponseEntity<Object> createCategory(@RequestBody Category category) {
         return ResponseHandler.responseBuilder(categoryService.createCategory(category),
                 HttpStatus.CREATED,
                 "category created successfully");
     }
 
-    @DeleteMapping("{name}")
-    public ResponseEntity<Object> deleteCategoryById(@PathVariable String name){
-        return ResponseHandler.responseBuilder(categoryService.deleteCategoryByName(name), HttpStatus.OK, "");
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteCategory(@PathVariable Long id) {
+        return ResponseHandler.responseBuilder(categoryService.deleteCategoryById(id), HttpStatus.OK, "");
     }
 
-    @PutMapping("{name}")
-    public ResponseEntity<Object> updateCategoryByName(@RequestBody Category category, @PathVariable String name){
+    @PutMapping("{id}")
+    public ResponseEntity<Object> updateCategory(@RequestBody Category category, @PathVariable Long id) {
         return ResponseHandler.responseBuilder(
                 "category updated successfully",
                 HttpStatus.OK,
-                categoryService.updateCategory(category, name));
+                categoryService.updateCategory(category, id));
     }
 
     @PostMapping("{category}")
-    public ResponseEntity<Object> addGenreToCategory(@PathVariable String category, @RequestParam String genre){
+    public ResponseEntity<Object> addGenreToCategory(@PathVariable String category, @RequestParam String genre) {
         return ResponseHandler.responseBuilder(
                 categoryService.addGenreToCategory(category, genre),
                 HttpStatus.OK,
@@ -57,9 +58,18 @@ public class CategoryController {
     }
 
     @PutMapping("{category}/genre/{genre}")
-    public ResponseEntity<Object> deleteGenreFromCategory(@PathVariable String category, @PathVariable String genre){
+    public ResponseEntity<Object> deleteGenreFromCategory(@PathVariable String category, @PathVariable String genre) {
         return ResponseHandler.responseBuilder(
                 categoryService.deleteGenreFromCategory(category, genre),
+                HttpStatus.OK,
+                ""
+        );
+    }
+
+    @PutMapping("{id}/genres")
+    public ResponseEntity<Object> updateGenres(@PathVariable Long id, @RequestBody List<String> genreNames) {
+        return ResponseHandler.responseBuilder(
+                categoryService.updateGenres(id, genreNames),
                 HttpStatus.OK,
                 ""
         );

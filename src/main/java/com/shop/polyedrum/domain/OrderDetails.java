@@ -24,7 +24,7 @@ public class OrderDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
     private BigDecimal amount;

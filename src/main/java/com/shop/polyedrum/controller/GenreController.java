@@ -31,9 +31,9 @@ public class GenreController {
         return ResponseHandler.responseBuilder(genreService.createGenre(genre), HttpStatus.OK, "");
     }
 
-    @DeleteMapping("{name}")
-    public ResponseEntity<Object> deleteGenreByName(@PathVariable String name){
-        return ResponseHandler.responseBuilder(genreService.deleteGenreByName(name),
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteGenre(@PathVariable Long id){
+        return ResponseHandler.responseBuilder(genreService.deleteGenreById(id),
                 HttpStatus.OK,
                 "");
     }
@@ -44,5 +44,4 @@ public class GenreController {
                 HttpStatus.OK,
                 "");
     }
-
 }

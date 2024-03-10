@@ -1,6 +1,5 @@
 package com.shop.polyedrum.service.impl;
 
-import com.shop.polyedrum.dao.GenreRepository;
 import com.shop.polyedrum.dao.ProductInfoRepository;
 import com.shop.polyedrum.dao.ProductRepository;
 import com.shop.polyedrum.domain.Genre;
@@ -101,6 +100,7 @@ public class ProductServiceImpl implements ProductService {
         return "product created successfully";
     }
 
+    @Transactional
     @Override
     public String updateProduct(Product product, Long id) {
         Product exsProduct = getProductById(id);
@@ -113,6 +113,7 @@ public class ProductServiceImpl implements ProductService {
         return "product updated successfully";
     }
 
+    @Transactional
     @Override
     public String deleteProduct(Long id) {
         getProductById(id);
@@ -148,6 +149,21 @@ public class ProductServiceImpl implements ProductService {
         return "product " + productName + " added to " + genreName;
     }
 
+    @Transactional
+    @Override
+    public String updateGenresToProduct(Long id, List<String> genreNames) {
+        Product product = getProductById(id);
+        List<Genre> genres = new ArrayList<>();
+
+        for (String name : genreNames) {
+            Genre genre = genreService.getGenreByName(name);
+            genres.add(genre);
+        }
+        product.setGenres(genres);
+        return "genres updated successfully!";
+    }
+
+    @Transactional
     @Override
     public String deleteGenreFromProduct(String productName, String genreName) {
         Product product = getProductByName(productName);
