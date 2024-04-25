@@ -24,6 +24,7 @@ public class BucketServiceImpl implements BucketService {
     private final BucketRepository bucketRepository;
     private final ProductRepository productRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public BucketDTO getBucketByUser(User user) {
         if (user == null || user.getBucket() == null){
@@ -48,6 +49,7 @@ public class BucketServiceImpl implements BucketService {
         return bucket;
     }
 
+    @Transactional
     @Override
     public Bucket createBucket(List<Long> productsIDs, User user) {
         Bucket bucket = new Bucket();
@@ -57,6 +59,7 @@ public class BucketServiceImpl implements BucketService {
         return bucketRepository.save(bucket);
     }
 
+    @Transactional
     @Override
     public void addProducts(List<Long> productIDs, Bucket bucket) {
         List<Product> products = bucket.getProducts();
@@ -68,6 +71,7 @@ public class BucketServiceImpl implements BucketService {
         bucketRepository.save(bucket);
     }
 
+    @Transactional
     @Override
     public String addProductToUserBucket(Long productID, User user) {
 

@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     @Override
     public User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(()->
@@ -31,25 +32,28 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDTO getUserDTOById(Long id){
         return toDto(getUserById(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream().map(this :: toDto).collect(Collectors.toList());
     }
 
-    private UserDTO toDto(User user){
-        return UserDTO.builder()
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .build();
+    @Transactional(readOnly = true)
+    @Override
+    public User findUserByJwt(String token){
+
+        String email = jwtService.extractUsername(token.substring(7));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
     }
 
+    @Transactional
     @Override
     public String deleteUser(Long id) {
         getUserById(id);
@@ -57,6 +61,7 @@ public class UserServiceImpl implements UserService {
         return "user deleted successfully";
     }
 
+    @Transactional
     @Override
     public String updateUser(UserDTO userDTO, Long id) {
         User user = getUserById(id);
@@ -87,12 +92,12 @@ public class UserServiceImpl implements UserService {
         return "";
     }
 
-    @Override
-    public User findUserByJwt(String token){
-
-        String email = jwtService.extractUsername(token.substring(7));
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
-        return user;
+    private UserDTO toDto(User user){
+        return UserDTO.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
     }
 }

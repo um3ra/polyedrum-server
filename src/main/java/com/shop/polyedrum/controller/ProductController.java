@@ -109,7 +109,7 @@ public class ProductController {
 
     @PutMapping("{id}/genres")
     public ResponseEntity<Object> updateGenres(@PathVariable Long id, @RequestBody List<String> genres){
-        return ResponseHandler.responseBuilder(productService.updateGenresToProduct(id, genres), HttpStatus.OK, "");
+        return ResponseHandler.responseBuilder(productService.updateGenres(id, genres), HttpStatus.OK, "");
     }
 
 

@@ -19,11 +19,18 @@ public class GenreServiceImpl implements GenreService{
 
     private final GenreRepository genreRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Genre> getGenres() {
         return genreRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Genre getGenreByName(String name) {
+        return genreRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Genre", "name", name));
+    }
 
     @Transactional
     @Override
@@ -39,6 +46,7 @@ public class GenreServiceImpl implements GenreService{
         return "genre updated successfully";
     }
 
+    @Transactional
     @Override
     public String createGenre(Genre genre) {
         if (genreRepository.findByName(genre.getName()).isPresent()){
@@ -49,17 +57,12 @@ public class GenreServiceImpl implements GenreService{
         return "genre with name " + genre.getName() + " created successfully";
     }
 
+    @Transactional
     @Override
     public String deleteGenreById(Long id) {
         Genre genre = genreRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Genre", "id", id));
         genreRepository.deleteById(genre.getId());
         return "genre deleted successfully";
-    }
-
-    @Override
-    public Genre getGenreByName(String name) {
-        return genreRepository.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Genre", "name", name));
     }
 }

@@ -23,18 +23,27 @@ public class CategoryServiceImpl implements CategoryService {
     private final GenreService genreService;
     private final GenreRepository genreRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public Category getCategoryByName(String categoryName) {
         return categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "name", categoryName));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "id", id));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
+    @Transactional
     @Override
     public String createCategory(Category category) {
         validateCategory(category);
@@ -42,30 +51,17 @@ public class CategoryServiceImpl implements CategoryService {
         return "Category was created";
     }
 
-    @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
-    }
-
-
-    private void validateCategory(Category category) {
-        if (categoryRepository.findByName(category.getName()).isPresent()) {
-            throw new ApiException("Category with name " + category.getName() + " is already exists!", HttpStatus.BAD_REQUEST);
-        }
-    }
-
+    @Transactional
     @Override
     public String updateCategory(Category category, Long id) {
         Category exsCategory = getCategoryById(id);
-        if (category.getName().equals(exsCategory.getName())){
-            return "category updated";
-        }
         validateCategory(category);
         exsCategory.setName(category.getName());
         categoryRepository.save(exsCategory);
         return "category updated";
     }
 
+    @Transactional
     @Override
     public String deleteCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
@@ -76,6 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
         return "category deleted successfully";
     }
 
+    @Transactional
     @Override
     public String addGenreToCategory(String categoryName, String genreName) {
         Category category = categoryRepository.findByName(categoryName)
@@ -96,8 +93,6 @@ public class CategoryServiceImpl implements CategoryService {
     public String deleteGenreFromCategory(String categoryName, String genreName) {
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "name", categoryName));
-
-
 
         Genre exsGenre = genreService.getGenreByName(genreName);
 
@@ -123,5 +118,11 @@ public class CategoryServiceImpl implements CategoryService {
         }
         category.setGenres(genres);
         return "genres updated successfully!";
+    }
+
+    private void validateCategory(Category category) {
+        if (categoryRepository.findByName(category.getName()).isPresent()) {
+            throw new ApiException("Category with name " + category.getName() + " is already exists!", HttpStatus.BAD_REQUEST);
+        }
     }
 }

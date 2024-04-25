@@ -11,7 +11,6 @@ import com.shop.polyedrum.domain.User;
 import com.shop.polyedrum.dto.BucketDTO;
 import com.shop.polyedrum.dto.BucketDetails;
 import com.shop.polyedrum.dto.OrderDTO;
-import com.shop.polyedrum.exception.ResourceNotFoundException;
 import com.shop.polyedrum.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -29,6 +28,21 @@ public class OrderServiceImpl implements OrderService {
     private final OrderDetailsRepository orderDetailsRepository;
     private final ProductRepository productRepository;
     private final BucketRepository bucketRepository;
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<OrderDTO> getOrders(){
+        return orderRepository
+                .findAll()
+                .stream()
+                .map(this::mapOrderToDTO).toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Order> getAllByUser(User user) {
+        return orderRepository.findAllByUser(user, Sort.by(Sort.Direction.DESC, "dateOfCreation"));
+    }
 
     @Transactional
     @Override
@@ -68,19 +82,5 @@ public class OrderServiceImpl implements OrderService {
                 .lastName(order.getUser().getLastName())
                 .orderDetails(order.getOrderDetails())
                 .build();
-    }
-
-
-    @Override
-    public List<OrderDTO> getOrders(){
-        return orderRepository
-                .findAll()
-                .stream()
-                .map(this::mapOrderToDTO).toList();
-    }
-
-    @Override
-    public List<Order> getAllByUser(User user) {
-        return orderRepository.findAllByUser(user, Sort.by(Sort.Direction.DESC, "dateOfCreation"));
     }
 }

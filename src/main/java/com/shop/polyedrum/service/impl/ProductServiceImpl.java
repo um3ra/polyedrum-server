@@ -31,18 +31,22 @@ public class ProductServiceImpl implements ProductService {
     private final GenreService genreService;
     private final ProductInfoRepository productInfoRepository;
 
+
+    @Transactional(readOnly = true)
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Product getProductByName(String name) {
         return productRepository.findByTitle(name).orElseThrow(
                 () -> new ResourceNotFoundException("Product", "name", name));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PaginationResponse<ProductDTO> getAllProducts(
             int pageNo,
@@ -57,6 +61,7 @@ public class ProductServiceImpl implements ProductService {
                 sortedProducts);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<AuthorDTO> getAllProductAuthors() {
         long authorId = 1;
@@ -69,6 +74,8 @@ public class ProductServiceImpl implements ProductService {
         return authorDTOS;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PaginationResponse<ProductDTO> getAllProductsByGenreNames(
             int pageNo,
@@ -82,6 +89,17 @@ public class ProductServiceImpl implements ProductService {
                 pageNo,
                 pageSize,
                 sortedProducts);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginationResponse<ProductDTO> findProductsByAuthor(int pageNo, int pageSize, String author, String sortBy, String sortOrder) {
+        List<Product> filteredProducts = sortProducts(sortBy, sortOrder, productRepository::findAll).stream()
+                .filter(pr -> pr.getAuthor().equals(author)).toList();
+        return getResponseWithPagination(
+                pageNo,
+                pageSize,
+                filteredProducts);
     }
 
     @Transactional
@@ -121,15 +139,7 @@ public class ProductServiceImpl implements ProductService {
         return "product deleted successfully";
     }
 
-    @Override
-    public PaginationResponse<ProductDTO> findProductsByAuthor(int pageNo, int pageSize, String author, String sortBy, String sortOrder) {
-        List<Product> filteredProducts = sortProducts(sortBy, sortOrder, productRepository::findAll).stream()
-                .filter(pr -> pr.getAuthor().equals(author)).toList();
-        return getResponseWithPagination(
-                pageNo,
-                pageSize,
-                filteredProducts);
-    }
+
 
     @Transactional
     @Override
@@ -151,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public String updateGenresToProduct(Long id, List<String> genreNames) {
+    public String updateGenres(Long id, List<String> genreNames) {
         Product product = getProductById(id);
         List<Genre> genres = new ArrayList<>();
 
